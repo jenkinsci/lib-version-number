@@ -22,6 +22,7 @@ package hudson.util;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -477,5 +478,9 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return ((IntegerItem) item).value.intValue();
     }
 
-
+    public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {
+        public int compare(VersionNumber o1, VersionNumber o2) {
+            return o2.compareTo(o1);
+        }
+    };
 }
