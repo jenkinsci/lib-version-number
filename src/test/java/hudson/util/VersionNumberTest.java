@@ -24,6 +24,7 @@
 package hudson.util;
 
 import junit.framework.TestCase;
+import org.jvnet.hudson.test.Issue;
 
 /**
  * @author Xavier Le Vourch
@@ -49,10 +50,12 @@ public class VersionNumberTest extends TestCase {
        assertTrue(new VersionNumber("2.0.ea1").isNewerThan(new VersionNumber("2.0.ea")));
        assertEquals(new VersionNumber("2.0.ea"), new VersionNumber("2.0.ea0"));
     }
-    
+
+    @Issue("JENKINS-40899")
     public void testSnapshots() {
         assertTrue(new VersionNumber("1.12").isNewerThan(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isNewerThan(new VersionNumber("1.11")));
+        assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isNewerThan(new VersionNumber("1.12-SNAPSHOT")));
         // This is changed from the old impl because snapshots are no longer a "magic" number
         assertFalse(new VersionNumber("1.12-SNAPSHOT").equals(new VersionNumber("1.11.*")));
         assertTrue(new VersionNumber("1.11.*").isNewerThan(new VersionNumber("1.11.9")));
