@@ -4,7 +4,8 @@
   <parent>
     <groupId>org.jenkins-ci</groupId>
     <artifactId>jenkins</artifactId>
-    <version>1.24</version>
+    <version>1.37</version>
+    <relativePath/>
   </parent>
 
   <artifactId>version-number</artifactId>
@@ -18,6 +19,12 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci</groupId>
+      <artifactId>test-annotations</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <scm>
@@ -28,14 +35,19 @@
   <licenses>
     <license>
       <name>MIT License</name>
-      <url>http://jenkins-ci.org/mit-license</url>
+      <url>https://opensource.org/licenses/MIT</url>
     </license>
   </licenses>
 
   <repositories>
     <repository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
 </project>
