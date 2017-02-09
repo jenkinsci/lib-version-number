@@ -54,6 +54,7 @@ public class VersionNumberTest extends TestCase {
     public void testSnapshots() {
         assertTrue(new VersionNumber("1.12").isNewerThan(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isNewerThan(new VersionNumber("1.11")));
+        assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").equals(new VersionNumber("1.12-SNAPSHOT")));
         // This is changed from the old impl because snapshots are no longer a "magic" number
         assertFalse(new VersionNumber("1.12-SNAPSHOT").equals(new VersionNumber("1.11.*")));
         assertTrue(new VersionNumber("1.11.*").isNewerThan(new VersionNumber("1.11.9")));
@@ -63,6 +64,7 @@ public class VersionNumberTest extends TestCase {
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").isNewerThan(new VersionNumber("2.0.2")));
         assertTrue(new VersionNumber("2.0.3").isNewerThan(new VersionNumber("2.0.3-20170207.105042-1")));
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").equals(new VersionNumber("2.0.3-SNAPSHOT")));
+        assertTrue(new VersionNumber("2.0.3-20170207.105042-1").equals(new VersionNumber("2.0.3-SNAPSHOT (private-08/24/2008 12:13-hudson)")));
         assertTrue(new VersionNumber("2.0.3-20170207.105043-2").isNewerThan(new VersionNumber("2.0.3-20170207.105042-1")));
         assertTrue(new VersionNumber("2.0.3-20170207.105042-2").isNewerThan(new VersionNumber("2.0.3-20170207.105042-1")));
         assertTrue(new VersionNumber("2.0.3-20170207.105042-13").isNewerThan(new VersionNumber("2.0.3-20170207.105042-2")));
