@@ -29,6 +29,8 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Immutable representation of a version number based on the Mercury version numbering scheme.
@@ -58,7 +60,12 @@ import java.util.Stack;
  * @author Hervé Boutemy (hboutemy@apache.org)
  */
 public class VersionNumber implements Comparable<VersionNumber> {
+
+    private static final Pattern SNAPSHOT = Pattern.compile("^.*((?:-\\d{8}\\.\\d{6}-\\d+)|-SNAPSHOT)$");
+
     private String value;
+
+    private String snapshot;
 
     private String canonical;
 
@@ -353,8 +360,14 @@ public class VersionNumber implements Comparable<VersionNumber> {
     private void parseVersion(String version) {
         this.value = version;
 
+
         items = new ListItem();
 
+        Matcher matcher = SNAPSHOT.matcher(version);
+        if (matcher.matches()) {
+            snapshot = matcher.group(1);
+            version = version.substring(0, version.length() - snapshot.length()) + "-SNAPSHOT";
+        }
         version = version.toLowerCase(Locale.ENGLISH);
 
         ListItem list = items;
@@ -443,7 +456,27 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     public int compareTo(VersionNumber o) {
-        return items.compareTo(o.items);
+        int result = items.compareTo(o.items);
+        if (result != 0) {
+            return result;
+        }
+        if (snapshot == null) {
+            return o.snapshot == null ? 0 : -1;
+        }
+        if (o.snapshot == null) {
+            return 1;
+        }
+        if ("-SNAPSHOT".equals(snapshot) || "-SNAPSHOT".equals(o.snapshot)) {
+            // cannot compare literal with timestamped.
+            return 0;
+        }
+        result = snapshot.substring(1, 16).compareTo(o.snapshot.substring(1, 16));
+        if (result != 0) {
+            return result;
+        }
+        int i1 = Integer.parseInt(snapshot.substring(17));
+        int i2 = Integer.parseInt(o.snapshot.substring(17));
+        return (i1 < i2) ? -1 : ((i1 == i2) ? 0 : 1);
     }
 
     public String toString() {
@@ -451,7 +484,21 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     public boolean equals(Object o) {
-        return (o instanceof VersionNumber) && canonical.equals(((VersionNumber) o).canonical);
+        if (!(o instanceof VersionNumber)) {
+            return false;
+        }
+        VersionNumber that = (VersionNumber) o;
+        if (!canonical.equals(that.canonical)) {
+            return false;
+        }
+        if (snapshot == null) {
+            return that.snapshot == null;
+        }
+        if ("-SNAPSHOT".equals(snapshot) || "-SNAPSHOT".equals(that.snapshot)) {
+            // text snapshots always match text or timestamped
+            return true;
+        }
+        return snapshot.equals(that.snapshot);
     }
 
     public int hashCode() {
