@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
  */
 public class VersionNumber implements Comparable<VersionNumber> {
 
-    private static final Pattern SNAPSHOT = Pattern.compile("^.*((?:-\\d{8}\\.\\d{6}-\\d+)|-SNAPSHOT)$");
+    private static final Pattern SNAPSHOT = Pattern.compile("^.*((?:-\\d{8}\\.\\d{6}-\\d+)|-SNAPSHOT)( \\(.*\\))?$");
 
     private String value;
 
@@ -366,7 +366,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
         Matcher matcher = SNAPSHOT.matcher(version);
         if (matcher.matches()) {
             snapshot = matcher.group(1);
-            version = version.substring(0, version.length() - snapshot.length()) + "-SNAPSHOT";
+            version = version.substring(0, matcher.start(1)) + "-SNAPSHOT";
         }
         version = version.toLowerCase(Locale.ENGLISH);
 
