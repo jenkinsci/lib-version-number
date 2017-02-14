@@ -5,11 +5,11 @@
     <groupId>org.jenkins-ci</groupId>
     <artifactId>jenkins</artifactId>
     <version>1.37</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <artifactId>version-number</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>Version number manipulation</name>
 
   <dependencies>
@@ -30,6 +30,7 @@
   <scm>
     <connection>scm:git:git://github.com/jenkinsci/lib-${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/lib-${project.artifactId}.git</developerConnection>
+    <tag>version-number-1.2</tag>
   </scm>
 
   <licenses>
