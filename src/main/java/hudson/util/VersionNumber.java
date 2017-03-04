@@ -513,16 +513,26 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return compareTo(rhs) > 0;
     }
 
+    /**
+     * Returns a digit (numeric component) by its position
+     *
+     * @param idx Digit position we want to retrieve
+     * @return The digit or -1 in case the position does not correspond with a digit
+     */
     public int digit(int idx) {
         Iterator i = items.iterator();
-        Item item = (Item) i.next();
+        Item item = null;
         while (idx > 0 && i.hasNext()) {
+            item  = (Item) i.next();
             if (item instanceof IntegerItem) {
                 idx--;
             }
-            i.next();
         }
-        return ((IntegerItem) item).value.intValue();
+        try {
+            return ((IntegerItem) item).value.intValue();
+        } catch (ClassCastException cast) {
+            return -1;
+        }
     }
 
     public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {
