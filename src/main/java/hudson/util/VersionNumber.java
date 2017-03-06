@@ -536,6 +536,10 @@ public class VersionNumber implements Comparable<VersionNumber> {
      * @return The digit or -1 in case the position does not correspond with a digit.
      */
     public int getDigitAt(int idx) {
+        if (idx < 0) {
+            return -1;
+        }
+
         Iterator it = items.iterator();
         int i = 0;
         Item item = null;
@@ -547,7 +551,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
                 return -1;
             }
         }
-        return ((idx < 0) || (idx - i >= 0)) ? -1 : ((IntegerItem) item).value.intValue();
+        return (idx - i >= 0) ? -1 : ((IntegerItem) item).value.intValue();
     }
 
     public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {
