@@ -520,22 +520,18 @@ public class VersionNumber implements Comparable<VersionNumber> {
      * @return The digit or -1 in case the position does not correspond with a digit.
      */
     public int digit(int idx) {
-        if (idx <= 0) {
-            return -1;
-        }
-        Iterator i = items.iterator();
+        Iterator it = items.iterator();
+        int i = 1;
         Item item = null;
-        while (idx > 0 && i.hasNext()) {
-            item  = (Item) i.next();
+        while (i <= idx && it.hasNext()) {
+            item  = (Item) it.next();
             if (item instanceof IntegerItem) {
-                idx--;
+                i++;
+            } else {
+                return -1;
             }
         }
-        try {
-            return (idx > 0) ? -1 : ((IntegerItem) item).value.intValue();
-        } catch (ClassCastException cast) {
-            return -1;
-        }
+        return ((idx <= 0) || (idx - i > 0)) ? -1 : ((IntegerItem) item).value.intValue();
     }
 
     public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {
