@@ -514,7 +514,8 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     /**
-     * Returns a digit (numeric component) by its position.
+     * Returns a digit (numeric component) by its position. Once a non-numeric component is found all remaining components
+     * are also considered non-numeric by this method.
      *
      * @param idx Digit position we want to retrieve starting by 1 (not zero).
      * @return The digit or -1 in case the position does not correspond with a digit.
