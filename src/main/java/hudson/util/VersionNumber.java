@@ -516,7 +516,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
     /**
      * Returns a digit (numeric component) by its position
      *
-     * @param idx Digit position we want to retrieve
+     * @param idx Digit position we want to retrieve starting by 1 (not zero).
      * @return The digit or -1 in case the position does not correspond with a digit
      */
     public int digit(int idx) {
@@ -529,7 +529,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
             }
         }
         try {
-            return ((IntegerItem) item).value.intValue();
+            return (idx > 0) ? -1 : ((IntegerItem) item).value.intValue();
         } catch (ClassCastException cast) {
             return -1;
         }

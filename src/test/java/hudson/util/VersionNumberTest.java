@@ -81,5 +81,6 @@ public class VersionNumberTest extends TestCase {
         assertEquals(0, new VersionNumber("2.7.22.0.2").digit(4));
         assertEquals(3, new VersionNumber("2.7.22.0.3-SNAPSHOT").digit(5));
         assertEquals(-1, new VersionNumber("2.0.3-20170207.105042-1").digit(4));
+        assertEquals(-1, new VersionNumber("2.0.3").digit(5));
     }
 }
