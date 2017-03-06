@@ -520,6 +520,9 @@ public class VersionNumber implements Comparable<VersionNumber> {
      * @return The digit or -1 in case the position does not correspond with a digit
      */
     public int digit(int idx) {
+        if (idx <= 0) {
+            return -1;
+        }
         Iterator i = items.iterator();
         Item item = null;
         while (idx > 0 && i.hasNext()) {
