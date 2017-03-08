@@ -513,6 +513,9 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return compareTo(rhs) > 0;
     }
 
+    /**
+     * @deprecated see {@link #getDigitAt(int)}
+     */
     public int digit(int idx) {
         Iterator i = items.iterator();
         Item item = (Item) i.next();
@@ -523,6 +526,32 @@ public class VersionNumber implements Comparable<VersionNumber> {
             i.next();
         }
         return ((IntegerItem) item).value.intValue();
+    }
+
+    /**
+     * Returns a digit (numeric component) by its position. Once a non-numeric component is found all remaining components
+     * are also considered non-numeric by this method.
+     *
+     * @param idx Digit position we want to retrieve starting by 0.
+     * @return The digit or -1 in case the position does not correspond with a digit.
+     */
+    public int getDigitAt(int idx) {
+        if (idx < 0) {
+            return -1;
+        }
+
+        Iterator it = items.iterator();
+        int i = 0;
+        Item item = null;
+        while (i <= idx && it.hasNext()) {
+            item  = (Item) it.next();
+            if (item instanceof IntegerItem) {
+                i++;
+            } else {
+                return -1;
+            }
+        }
+        return (idx - i >= 0) ? -1 : ((IntegerItem) item).value.intValue();
     }
 
     public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {

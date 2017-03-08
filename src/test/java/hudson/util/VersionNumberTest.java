@@ -71,4 +71,20 @@ public class VersionNumberTest extends TestCase {
         assertFalse(new VersionNumber("2.0.3-20170207.105042-1").isNewerThan(new VersionNumber("2.0.3-SNAPSHOT")));
         assertFalse(new VersionNumber("2.0.3-20170207.105042-1").isOlderThan(new VersionNumber("2.0.3-SNAPSHOT")));
     }
+
+    public void testDigit() {
+        assertEquals(32, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(1));
+        assertEquals(3, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(2));
+        assertEquals(1, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(3));
+        assertEquals(-1, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(4));
+        assertEquals(2, new VersionNumber("2.7.22.0.2").getDigitAt(4));
+        assertEquals(3, new VersionNumber("2.7.22.0.3-SNAPSHOT").getDigitAt(4));
+        assertEquals(-1, new VersionNumber("2.0.3-20170207.105042-1").getDigitAt(4));
+        assertEquals(-1, new VersionNumber("2.0.3").getDigitAt(5));
+        assertEquals(2, new VersionNumber("2.0.3").getDigitAt(0));
+        assertEquals(-1, new VersionNumber("2.0.3").getDigitAt(-1));
+        assertEquals(-1, new VersionNumber("1.0.0.GA.2-3").getDigitAt(3));
+        assertEquals(-1, new VersionNumber("").getDigitAt(-1));
+        assertEquals(-1, new VersionNumber("").getDigitAt(0));
+    }
 }
