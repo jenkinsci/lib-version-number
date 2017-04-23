@@ -514,16 +514,17 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     /**
-     * @deprecated see {@link #getDigitAt(int)}
+     * Returns the nth integer component of the version string. The first element is index 0. Non-integer items are skipped. Returns the last integer component if the index is too big.
      */
     public int digit(int idx) {
         Iterator i = items.iterator();
         Item item = (Item) i.next();
         while (idx > 0 && i.hasNext()) {
-            if (item instanceof IntegerItem) {
+            Object o = i.next();
+            if (o instanceof IntegerItem) {
                 idx--;
+                item = (Item) o;
             }
-            i.next();
         }
         return ((IntegerItem) item).value.intValue();
     }
