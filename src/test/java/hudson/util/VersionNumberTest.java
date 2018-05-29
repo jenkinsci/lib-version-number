@@ -23,14 +23,17 @@
  */
 package hudson.util;
 
-import junit.framework.TestCase;
+import java.util.Arrays;
+import org.apache.maven.artifact.versioning.ComparableVersion;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.jvnet.hudson.test.Issue;
 
-/**
- * @author Xavier Le Vourch
- */
-public class VersionNumberTest extends TestCase {
+public class VersionNumberTest {
 
-    public void testIsNewerThan() {
+    @Test
+    public void isNewerThan() {
        assertTrue(new VersionNumber("2.0.*").isNewerThan(new VersionNumber("2.0")));
        assertTrue(new VersionNumber("2.1-SNAPSHOT").isNewerThan(new VersionNumber("2.0.*")));
        assertTrue(new VersionNumber("2.1").isNewerThan(new VersionNumber("2.1-SNAPSHOT")));
@@ -45,22 +48,26 @@ public class VersionNumberTest extends TestCase {
        assertTrue(new VersionNumber("2.0.0").equals(new VersionNumber("2.0")));
     }
     
-    public void testEarlyAccess() {
+    @Test
+    public void earlyAccess() {
        assertTrue(new VersionNumber("2.0.ea2").isNewerThan(new VersionNumber("2.0.ea1")));
        assertTrue(new VersionNumber("2.0.ea1").isNewerThan(new VersionNumber("2.0.ea")));
        assertEquals(new VersionNumber("2.0.ea"), new VersionNumber("2.0.ea0"));
     }
     
-    public void testSnapshots() {
+    @Test
+    public void snapshots() {
         assertTrue(new VersionNumber("1.12").isNewerThan(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isNewerThan(new VersionNumber("1.11")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").equals(new VersionNumber("1.12-SNAPSHOT")));
         // This is changed from the old impl because snapshots are no longer a "magic" number
         assertFalse(new VersionNumber("1.12-SNAPSHOT").equals(new VersionNumber("1.11.*")));
         assertTrue(new VersionNumber("1.11.*").isNewerThan(new VersionNumber("1.11.9")));
+        assertTrue(new VersionNumber("1.12-SNAPSHOT").isNewerThan(new VersionNumber("1.12-rc9999.abc123def456")));
     }
 
-    public void testTimestamps() {
+    @Test
+    public void timestamps() {
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").isNewerThan(new VersionNumber("2.0.2")));
         assertTrue(new VersionNumber("2.0.3").isNewerThan(new VersionNumber("2.0.3-20170207.105042-1")));
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").equals(new VersionNumber("2.0.3-SNAPSHOT")));
@@ -72,7 +79,8 @@ public class VersionNumberTest extends TestCase {
         assertFalse(new VersionNumber("2.0.3-20170207.105042-1").isOlderThan(new VersionNumber("2.0.3-SNAPSHOT")));
     }
 
-    public void testDigit() {
+    @Test
+    public void digit() {
         assertEquals(32, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(1));
         assertEquals(3, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(2));
         assertEquals(1, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(3));
@@ -87,4 +95,32 @@ public class VersionNumberTest extends TestCase {
         assertEquals(-1, new VersionNumber("").getDigitAt(-1));
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
+
+    @Ignore("TODO still pretty divergent: expected:<[2.0.0, 2.0, 2.0.*, 2.0.ea, 2.0.0.99, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.1]> but was:<[2.0.ea, 2.0.0, 2.0, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1]>")
+    @Issue("JENKINS-51594")
+    @Test
+    public void mavenComparison() {
+        String[] versions = {"2.0.*", "2.0.1", "2.0.1-SNAPSHOT", "2.0.0.99", "2.0.0", "2.0.ea", "2.0", "2.0.1-rc9999.abc123def456"};
+        // Much more easily expressed in java.level=8:
+        ComparableVersion[] control = new ComparableVersion[versions.length];
+        for (int i = 0; i < versions.length; i++) {
+            control[i] = new ComparableVersion(versions[i]);
+        }
+        Arrays.sort(control);
+        String[] expected = new String[versions.length];
+        for (int i = 0; i < versions.length; i++) {
+            expected[i] = control[i].toString();
+        }
+        VersionNumber[] test = new VersionNumber[versions.length];
+        for (int i = 0; i < versions.length; i++) {
+            test[i] = new VersionNumber(versions[i]);
+        }
+        Arrays.sort(test);
+        String[] actual = new String[versions.length];
+        for (int i = 0; i < versions.length; i++) {
+            actual[i] = test[i].toString();
+        }
+        assertEquals(Arrays.asList(expected), Arrays.asList(actual));
+    }
+
 }

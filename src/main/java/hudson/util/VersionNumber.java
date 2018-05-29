@@ -48,10 +48,6 @@ import java.util.regex.Pattern;
  * <p>
  * 'SNAPSHOT' is also allowed as a component, and "N.SNAPSHOT" is interpreted as "N-1.*"
  *
- * <pre>
- * 2.0.* &lt; 2.0.1 &lt; 2.0.1-SNAPSHOT &lt; 2.0.0.99 &lt; 2.0.0 &lt; 2.0.ea &lt; 2.0
- * </pre>
- *
  * This class is re-implemented in 1.415. The class was originally introduced in 1.139
  *
  * @since 1.139
@@ -180,7 +176,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
      * Represents a string in the version item list, usually a qualifier.
      */
     private static class StringItem implements Item {
-        private final static String[] QUALIFIERS = {"snapshot", "alpha", "beta", "milestone", "rc", "", "sp"};
+        private final static String[] QUALIFIERS = {"alpha", "beta", "milestone", "rc", "snapshot", "", "sp"};
 
         private final static List<String> _QUALIFIERS = Arrays.asList(QUALIFIERS);
 
