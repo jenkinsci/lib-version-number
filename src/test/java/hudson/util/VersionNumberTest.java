@@ -47,6 +47,12 @@ public class VersionNumberTest {
        // which makes more sense than before
        assertTrue(new VersionNumber("2.0.0").equals(new VersionNumber("2.0")));
     }
+
+    @Test
+    public void alpha() {
+       assertTrue(new VersionNumber("2.0").isNewerThan(new VersionNumber("2.0-alpha-1")));
+       assertTrue(new VersionNumber("2.0-alpha-1").isNewerThan(new VersionNumber("2.0-alpha-1-rc9999.abc123def456")));
+    }
     
     @Test
     public void earlyAccess() {
@@ -96,11 +102,11 @@ public class VersionNumberTest {
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
 
-    @Ignore("TODO still pretty divergent: expected:<[2.0.0, 2.0, 2.0.*, 2.0.ea, 2.0.0.99, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.1]> but was:<[2.0.ea, 2.0.0, 2.0, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1]>")
+    @Ignore("TODO still pretty divergent: expected:<[2.0.0, 2.0, 2.0.*, 2.0.ea, 2.0.0.99, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-alpha-1, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.1]> but was:<[2.0.ea, 2.0.0, 2.0, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-alpha-1, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1]>")
     @Issue("JENKINS-51594")
     @Test
     public void mavenComparison() {
-        String[] versions = {"2.0.*", "2.0.1", "2.0.1-SNAPSHOT", "2.0.0.99", "2.0.0", "2.0.ea", "2.0", "2.0.1-rc9999.abc123def456"};
+        String[] versions = {"2.0.*", "2.0.1", "2.0.1-SNAPSHOT", "2.0.0.99", "2.0.0", "2.0.ea", "2.0", "2.0.1-rc9999.abc123def456", "2.0.1-alpha-1-rc9999.abc123def456", "2.0.1-alpha-1"};
         // Much more easily expressed in java.level=8:
         ComparableVersion[] control = new ComparableVersion[versions.length];
         for (int i = 0; i < versions.length; i++) {
