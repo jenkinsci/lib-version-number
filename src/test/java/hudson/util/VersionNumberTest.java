@@ -48,6 +48,7 @@ public class VersionNumberTest {
        assertTrue(new VersionNumber("2.0.0").equals(new VersionNumber("2.0")));
     }
 
+    @Issue("https://gitter.im/jenkinsci/configuration-as-code-plugin?at=5b4f2fc455a7e23c014da2af")
     @Test
     public void alpha() {
        assertTrue(new VersionNumber("2.0").isNewerThan(new VersionNumber("2.0-alpha-1")));
