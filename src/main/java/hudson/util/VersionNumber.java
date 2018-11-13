@@ -214,6 +214,8 @@ public class VersionNumber implements Comparable<VersionNumber> {
                     case 'm':
                         value = "milestone";
                         break;
+                    default:
+                        /* fall through? */
                 }
             }
             this.value = ALIASES.getProperty(value, value);
@@ -323,7 +325,16 @@ public class VersionNumber implements Comparable<VersionNumber> {
                         Item r = right.hasNext() ? (Item) right.next() : null;
 
                         // if this is shorter, then invert the compare and mul with -1
-                        int result = l == null ? -1 * r.compareTo(l) : l.compareTo(r);
+                        int result;
+                        if (l == null) {
+                            if (r == null) {
+                                result = 0;
+                            } else {
+                                result = -1 * r.compareTo(null);
+                            }
+                        } else {
+                            result = l.compareTo(r);
+                        }
 
                         if (result != 0) {
                             return result;
