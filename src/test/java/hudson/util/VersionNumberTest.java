@@ -87,4 +87,14 @@ public class VersionNumberTest extends TestCase {
         assertEquals(-1, new VersionNumber("").getDigitAt(-1));
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
+
+    public void testOrEqualTo() {
+        assertTrue(new VersionNumber("1.8").isNewerOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.9").isNewerOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("2").isNewerOrEqualTo(new VersionNumber("1.8")));
+
+        assertTrue(new VersionNumber("1.8").isOlderOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.7").isOlderOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1").isOlderOrEqualTo(new VersionNumber("1.8")));
+    }
 }
