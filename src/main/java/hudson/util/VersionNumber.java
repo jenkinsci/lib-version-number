@@ -524,6 +524,14 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return compareTo(rhs) > 0;
     }
 
+    public boolean isOlderOrEqualTo(VersionNumber rhs) {
+        return compareTo(rhs) <= 0;
+    }
+
+    public boolean isNewerOrEqualTo(VersionNumber rhs) {
+        return compareTo(rhs) >= 0;
+    }
+
     /**
      * @deprecated see {@link #getDigitAt(int)}
      */
