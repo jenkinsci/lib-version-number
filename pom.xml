@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>version-number</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.5</version>
   <name>Version number manipulation</name>
 
   <dependencies>
@@ -30,7 +30,7 @@
   <scm>
     <connection>scm:git:git://github.com/jenkinsci/lib-${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/lib-${project.artifactId}.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>version-number-1.5</tag>
   </scm>
 
   <licenses>
