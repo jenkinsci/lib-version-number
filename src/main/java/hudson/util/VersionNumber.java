@@ -524,11 +524,11 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return compareTo(rhs) > 0;
     }
 
-    public boolean isOlderOrEqualTo(VersionNumber rhs) {
+    public boolean isOlderThanOrEqualTo(VersionNumber rhs) {
         return compareTo(rhs) <= 0;
     }
 
-    public boolean isNewerOrEqualTo(VersionNumber rhs) {
+    public boolean isNewerThanOrEqualTo(VersionNumber rhs) {
         return compareTo(rhs) >= 0;
     }
 

@@ -89,12 +89,12 @@ public class VersionNumberTest extends TestCase {
     }
 
     public void testOrEqualTo() {
-        assertTrue(new VersionNumber("1.8").isNewerOrEqualTo(new VersionNumber("1.8")));
-        assertTrue(new VersionNumber("1.9").isNewerOrEqualTo(new VersionNumber("1.8")));
-        assertTrue(new VersionNumber("2").isNewerOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.8").isNewerThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.9").isNewerThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("2").isNewerThanOrEqualTo(new VersionNumber("1.8")));
 
-        assertTrue(new VersionNumber("1.8").isOlderOrEqualTo(new VersionNumber("1.8")));
-        assertTrue(new VersionNumber("1.7").isOlderOrEqualTo(new VersionNumber("1.8")));
-        assertTrue(new VersionNumber("1").isOlderOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.8").isOlderThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.7").isOlderThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1").isOlderThanOrEqualTo(new VersionNumber("1.8")));
     }
 }
