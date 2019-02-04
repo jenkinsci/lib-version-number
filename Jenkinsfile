@@ -7,7 +7,7 @@ pipeline {
         stage('Parallel Stage') {
             failFast true
             parallel {
-                stage('Branch A') {
+                stage('Linux') {
                     agent {
                         label "linux"
                     }
@@ -15,7 +15,7 @@ pipeline {
                         sh 'mvn -B clean verify'
                     }
                 }
-                stage('Branch B') {
+                stage('Windows') {
                     agent {
                         label "windows"
                     }
