@@ -1,5 +1,8 @@
 pipeline {
     agent none
+    tools {
+        maven "mvn"
+    }
     stages {
         stage('Parallel Stage') {
             failFast true
