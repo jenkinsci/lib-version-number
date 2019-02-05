@@ -12,7 +12,7 @@ pipeline {
                         label "linux"
                     }
                     steps {
-                        sh 'mvn -B clean verify'
+                        sh 'mvn -V -B clean verify'
                     }
                 }
                 stage('Windows') {
@@ -20,7 +20,7 @@ pipeline {
                         label "windows"
                     }
                     steps {
-                        bat 'mvn -B clean verify'
+                        bat 'mvn -V -B clean verify'
                     }
                 }
             }
