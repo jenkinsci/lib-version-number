@@ -10,7 +10,8 @@
 
   <artifactId>version-number</artifactId>
   <version>1.7-SNAPSHOT</version>
-  <name>Version number manipulation</name>
+  <name>Version Number Library</name>
+  <description>Offers API classes for parsing and comparing version numbers</description>
 
   <dependencies>
     <dependency>
