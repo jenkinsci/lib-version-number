@@ -2,6 +2,7 @@ pipeline {
     agent none
     tools {
         maven "mvn"
+        jdk 'jdk8'
     }
     stages {
         stage('Parallel Stage') {
