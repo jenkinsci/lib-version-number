@@ -4,6 +4,9 @@ pipeline {
         maven "mvn"
         jdk 'jdk8'
     }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
     stages {
         stage('Parallel Stage') {
             failFast true
