@@ -46,6 +46,7 @@ public class JavaSpecificationVersion extends VersionNumber {
     public static final JavaSpecificationVersion JAVA_10 = new JavaSpecificationVersion("10");
     public static final JavaSpecificationVersion JAVA_11 = new JavaSpecificationVersion("11");
     public static final JavaSpecificationVersion JAVA_12 = new JavaSpecificationVersion("12");
+    public static final JavaSpecificationVersion JAVA_13 = new JavaSpecificationVersion("13");
 
     /**
      * Constructor which automatically normalizes version strings.
@@ -80,9 +81,9 @@ public class JavaSpecificationVersion extends VersionNumber {
 
     /**
      * Get the Java Specification version for the current JVM
-     * @return Java Specification version or {@code null}
+     * @return Java Specification version
      * @throws NumberFormatException Version parsing error
-     * @throws IllegalArgumentException JVM does not specify the mandatory {@link #JAVA_SPEC_VERSION_PROPERTY_NAME} property.
+     * @throws IllegalStateException JVM does not specify the mandatory {@link #JAVA_SPEC_VERSION_PROPERTY_NAME} property.
      */
     @Nonnull
     public static JavaSpecificationVersion forCurrentJVM() throws NumberFormatException {
