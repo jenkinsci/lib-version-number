@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.jenkins-ci</groupId>
     <artifactId>jenkins</artifactId>
-    <version>1.46</version>
+    <version>1.50</version>
     <relativePath />
   </parent>
 
   <artifactId>version-number</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.7-SNAPSHOT</version>
   <name>Version number manipulation</name>
 
   <dependencies>
@@ -27,6 +27,12 @@
       <artifactId>maven-artifact</artifactId>
       <version>3.5.3</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>annotations</artifactId>
+      <version>3.0.0</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 

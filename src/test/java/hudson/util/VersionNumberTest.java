@@ -130,4 +130,14 @@ public class VersionNumberTest {
         assertEquals(Arrays.asList(expected), Arrays.asList(actual));
     }
 
+    public void testOrEqualTo() {
+        assertTrue(new VersionNumber("1.8").isNewerThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.9").isNewerThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("2").isNewerThanOrEqualTo(new VersionNumber("1.8")));
+
+        assertTrue(new VersionNumber("1.8").isOlderThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1.7").isOlderThanOrEqualTo(new VersionNumber("1.8")));
+        assertTrue(new VersionNumber("1").isOlderThanOrEqualTo(new VersionNumber("1.8")));
+    }
+
 }
