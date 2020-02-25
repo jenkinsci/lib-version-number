@@ -8,7 +8,7 @@ and also a `JavaSpecificationVersion` for Java version analysis.
 
 ## Javadoc
 
-Javadoc is published [here](https://javadoc.jenkins-ci.org/component/remoting/)
+Javadoc is published [here](https://javadoc.jenkins-ci.org/component/version-number/)
 
 ## License
 
