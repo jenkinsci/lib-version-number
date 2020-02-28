@@ -1,6 +1,14 @@
 Release Notes
 ====
 
+### 1.7
+
+Release date: Feb 28, 2020
+
+* [PR #14](https://github.com/jenkinsci/lib-version-number/pull/14) Update the README with the proper javadoc link
+* [PR #13](https://github.com/jenkinsci/lib-version-number/pull/13) Update pom (cleanup + switching to spotbugs annotations)
+
+
 ### 1.6
 
 Release date: Feb 05, 2019
