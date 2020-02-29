@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>version-number</artifactId>
-  <version>1.7-SNAPSHOT</version>
+  <version>1.7</version>
   <name>Version Number Library</name>
   <description>Offers API classes for parsing and comparing version numbers</description>
   <url>https://github.com/jenkinsci/lib-${project.artifactId}</url>
@@ -41,7 +41,7 @@
     <connection>scm:git:git://github.com/jenkinsci/lib-${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/lib-${project.artifactId}.git</developerConnection>
     <url>https://github.com/jenkinsci/lib-${project.artifactId}</url>
-    <tag>HEAD</tag>
+    <tag>version-number-1.7</tag>
   </scm>
 
   <licenses>
