@@ -1,4 +1,4 @@
-Version Number Library
+Version Number Library (testing the GitHub App Auth)
 ====
 
 Offers API classes for parsing and comparing version numbers.
