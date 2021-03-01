@@ -131,7 +131,8 @@ public class VersionNumberTest {
         // Maven considers 99.1.abcd1234abcd to sort before 99.1234deadbeef so we cannot simply use 99. as the branch prefix.
         // Nor can we use 99.1234deadbeef. as the prefix because Maven would compare 5 and 10 lexicographically.
         // 100._. seems to work but is not intuitive.
-        assertOrderAlsoInMaven("99.1234deadbeef", "100._.5.abcd1234abcd", "100._.10.abcd1234abcd", "100.dead9876beef");
+        // Using changelist.format=%d.v%s behaves better, apparently because then the hash is never treated like a number.
+        assertOrderAlsoInMaven("99.v1234deadbeef", "99.5.vabcd1234abcd", "99.10.vabcd1234abcd", "100.vdead9876beef");
     }
 
     public void testOrEqualTo() {
