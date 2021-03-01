@@ -24,13 +24,21 @@
 package hudson.util;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.jvnet.hudson.test.Issue;
 
 public class VersionNumberTest {
+
+    @Rule
+    public ErrorCollector errors = new ErrorCollector();
 
     @Test
     public void isNewerThan() {
@@ -103,31 +111,25 @@ public class VersionNumberTest {
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
 
-    @Ignore("TODO still pretty divergent: expected:<[2.0.0, 2.0, 2.0.*, 2.0.ea, 2.0.0.99, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-alpha-1, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.1]> but was:<[2.0.ea, 2.0.0, 2.0, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-alpha-1, 2.0.1-rc9999.abc123def456, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1]>")
+    private void assertOrderAlsoInMaven(String... versions) {
+        errors.checkThat("Maven order is correct", Stream.of(versions).map(ComparableVersion::new).sorted().map(ComparableVersion::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));
+        errors.checkThat("Jenkins order is correct", Stream.of(versions).map(VersionNumber::new).sorted().map(VersionNumber::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));
+    }
+
+    @Ignore("TODO still pretty divergent: …was <[2.0.ea, 2.0.0, 2.0, 2.0.1-alpha-1, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-rc9999.abc123def456, 2.0.1]>")
     @Issue("JENKINS-51594")
     @Test
     public void mavenComparison() {
-        String[] versions = {"2.0.*", "2.0.1", "2.0.1-SNAPSHOT", "2.0.0.99", "2.0.0", "2.0.ea", "2.0", "2.0.1-rc9999.abc123def456", "2.0.1-alpha-1-rc9999.abc123def456", "2.0.1-alpha-1"};
-        // Much more easily expressed in java.level=8:
-        ComparableVersion[] control = new ComparableVersion[versions.length];
-        for (int i = 0; i < versions.length; i++) {
-            control[i] = new ComparableVersion(versions[i]);
-        }
-        Arrays.sort(control);
-        String[] expected = new String[versions.length];
-        for (int i = 0; i < versions.length; i++) {
-            expected[i] = control[i].toString();
-        }
-        VersionNumber[] test = new VersionNumber[versions.length];
-        for (int i = 0; i < versions.length; i++) {
-            test[i] = new VersionNumber(versions[i]);
-        }
-        Arrays.sort(test);
-        String[] actual = new String[versions.length];
-        for (int i = 0; i < versions.length; i++) {
-            actual[i] = test[i].toString();
-        }
-        assertEquals(Arrays.asList(expected), Arrays.asList(actual));
+        assertOrderAlsoInMaven("2.0.0", "2.0", "2.0.*", "2.0.ea", "2.0.0.99", "2.0.1-alpha-1-rc9999.abc123def456", "2.0.1-alpha-1", "2.0.1-rc9999.abc123def456", "2.0.1-SNAPSHOT", "2.0.1");
+    }
+
+    @Issue("JEP-229")
+    @Test
+    public void backportJep229() {
+        // Maven considers 99.1.abcd1234abcd to sort before 99.1234deadbeef so we cannot simply use 99. as the branch prefix.
+        // Nor can we use 99.1234deadbeef. as the prefix because Maven would compare 5 and 10 lexicographically.
+        // 100._. seems to work but is not intuitive.
+        assertOrderAlsoInMaven("99.1234deadbeef", "100._.5.abcd1234abcd", "100._.10.abcd1234abcd", "100.dead9876beef");
     }
 
     public void testOrEqualTo() {
