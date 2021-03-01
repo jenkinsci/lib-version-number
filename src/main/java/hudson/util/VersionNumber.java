@@ -176,7 +176,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
      * Represents a string in the version item list, usually a qualifier.
      */
     private static class StringItem implements Item {
-        private final static String[] QUALIFIERS = {"alpha", "beta", "milestone", "rc", "snapshot", "", "sp"};
+        private final static String[] QUALIFIERS = {"snapshot", "alpha", "beta", "milestone", "rc", "", "sp"};
 
         private final static List<String> _QUALIFIERS = Arrays.asList(QUALIFIERS);
 
