@@ -23,14 +23,25 @@
  */
 package hudson.util;
 
-import junit.framework.TestCase;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.hamcrest.CoreMatchers;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ErrorCollector;
+import org.jvnet.hudson.test.Issue;
 
-/**
- * @author Xavier Le Vourch
- */
-public class VersionNumberTest extends TestCase {
+public class VersionNumberTest {
 
-    public void testIsNewerThan() {
+    @Rule
+    public ErrorCollector errors = new ErrorCollector();
+
+    @Test
+    public void isNewerThan() {
        assertTrue(new VersionNumber("2.0.*").isNewerThan(new VersionNumber("2.0")));
        assertTrue(new VersionNumber("2.1-SNAPSHOT").isNewerThan(new VersionNumber("2.0.*")));
        assertTrue(new VersionNumber("2.1").isNewerThan(new VersionNumber("2.1-SNAPSHOT")));
@@ -44,23 +55,36 @@ public class VersionNumberTest extends TestCase {
        // which makes more sense than before
        assertTrue(new VersionNumber("2.0.0").equals(new VersionNumber("2.0")));
     }
+
+    @Issue("https://gitter.im/jenkinsci/configuration-as-code-plugin?at=5b4f2fc455a7e23c014da2af")
+    @Test
+    public void alpha() {
+       assertTrue(new VersionNumber("2.0").isNewerThan(new VersionNumber("2.0-alpha-1")));
+       assertTrue(new VersionNumber("2.0-alpha-1").isNewerThan(new VersionNumber("2.0-alpha-1-rc9999.abc123def456")));
+    }
     
-    public void testEarlyAccess() {
+    @Test
+    public void earlyAccess() {
        assertTrue(new VersionNumber("2.0.ea2").isNewerThan(new VersionNumber("2.0.ea1")));
        assertTrue(new VersionNumber("2.0.ea1").isNewerThan(new VersionNumber("2.0.ea")));
        assertEquals(new VersionNumber("2.0.ea"), new VersionNumber("2.0.ea0"));
     }
     
-    public void testSnapshots() {
+    @Test
+    public void snapshots() {
         assertTrue(new VersionNumber("1.12").isNewerThan(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isNewerThan(new VersionNumber("1.11")));
         assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").equals(new VersionNumber("1.12-SNAPSHOT")));
         // This is changed from the old impl because snapshots are no longer a "magic" number
         assertFalse(new VersionNumber("1.12-SNAPSHOT").equals(new VersionNumber("1.11.*")));
         assertTrue(new VersionNumber("1.11.*").isNewerThan(new VersionNumber("1.11.9")));
+        /* TODO the reverse:
+        assertTrue(new VersionNumber("1.12-SNAPSHOT").isNewerThan(new VersionNumber("1.12-rc9999.abc123def456")));
+        */
     }
 
-    public void testTimestamps() {
+    @Test
+    public void timestamps() {
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").isNewerThan(new VersionNumber("2.0.2")));
         assertTrue(new VersionNumber("2.0.3").isNewerThan(new VersionNumber("2.0.3-20170207.105042-1")));
         assertTrue(new VersionNumber("2.0.3-20170207.105042-1").equals(new VersionNumber("2.0.3-SNAPSHOT")));
@@ -72,7 +96,8 @@ public class VersionNumberTest extends TestCase {
         assertFalse(new VersionNumber("2.0.3-20170207.105042-1").isOlderThan(new VersionNumber("2.0.3-SNAPSHOT")));
     }
 
-    public void testDigit() {
+    @Test
+    public void digit() {
         assertEquals(32, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(1));
         assertEquals(3, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(2));
         assertEquals(1, new VersionNumber("2.32.3.1-SNAPSHOT").getDigitAt(3));
@@ -88,6 +113,28 @@ public class VersionNumberTest extends TestCase {
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
 
+    private void assertOrderAlsoInMaven(String... versions) {
+        errors.checkThat("Maven order is correct", Stream.of(versions).map(ComparableVersion::new).sorted().map(ComparableVersion::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));
+        errors.checkThat("Jenkins order is correct", Stream.of(versions).map(VersionNumber::new).sorted().map(VersionNumber::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));
+    }
+
+    @Ignore("TODO still pretty divergent: …was <[2.0.ea, 2.0.0, 2.0, 2.0.1-alpha-1, 2.0.1-SNAPSHOT, 2.0.*, 2.0.0.99, 2.0.1-alpha-1-rc9999.abc123def456, 2.0.1-rc9999.abc123def456, 2.0.1]>")
+    @Issue("JENKINS-51594")
+    @Test
+    public void mavenComparison() {
+        assertOrderAlsoInMaven("2.0.0", "2.0", "2.0.*", "2.0.ea", "2.0.0.99", "2.0.1-alpha-1-rc9999.abc123def456", "2.0.1-alpha-1", "2.0.1-rc9999.abc123def456", "2.0.1-SNAPSHOT", "2.0.1");
+    }
+
+    @Issue("JEP-229")
+    @Test
+    public void backportJep229() {
+        // Maven considers 99.1.abcd1234abcd to sort before 99.1234deadbeef so we cannot simply use 99. as the branch prefix.
+        // Nor can we use 99.1234deadbeef. as the prefix because Maven would compare 5 and 10 lexicographically.
+        // 100._. seems to work but is not intuitive.
+        // Using changelist.format=%d.v%s behaves better, apparently because then the hash is never treated like a number.
+        assertOrderAlsoInMaven("99.v1234deadbeef", "99.5.vabcd1234abcd", "99.10.vabcd1234abcd", "100.vdead9876beef");
+    }
+
     public void testOrEqualTo() {
         assertTrue(new VersionNumber("1.8").isNewerThanOrEqualTo(new VersionNumber("1.8")));
         assertTrue(new VersionNumber("1.9").isNewerThanOrEqualTo(new VersionNumber("1.8")));
@@ -97,4 +144,5 @@ public class VersionNumberTest extends TestCase {
         assertTrue(new VersionNumber("1.7").isOlderThanOrEqualTo(new VersionNumber("1.8")));
         assertTrue(new VersionNumber("1").isOlderThanOrEqualTo(new VersionNumber("1.8")));
     }
+
 }
