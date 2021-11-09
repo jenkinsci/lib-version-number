@@ -459,7 +459,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     private static Item parseItem(boolean isDigit, String buf) {
-        return isDigit ? (Item) new IntegerItem(buf) : (Item) new StringItem(buf, false);
+        return isDigit ? new IntegerItem(buf) : new StringItem(buf, false);
     }
 
     public int compareTo(VersionNumber o) {
