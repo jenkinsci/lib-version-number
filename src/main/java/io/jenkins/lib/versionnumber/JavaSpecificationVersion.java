@@ -25,7 +25,7 @@ package io.jenkins.lib.versionnumber;
 
 import hudson.util.VersionNumber;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * Java Version Specification.
@@ -52,13 +52,13 @@ public class JavaSpecificationVersion extends VersionNumber {
      * @param version Java specification version, should follow JEP-223 or the previous format.
      * @throws NumberFormatException Illegal Java specification version number
      */
-    public JavaSpecificationVersion(@Nonnull String version)
+    public JavaSpecificationVersion(@NonNull String version)
             throws NumberFormatException {
         super(normalizeVersion(version));
     }
 
-    @Nonnull
-    private static String normalizeVersion(@Nonnull String input)
+    @NonNull
+    private static String normalizeVersion(@NonNull String input)
             throws NumberFormatException {
         input = input.trim();
         if (input.startsWith("1.")) {
@@ -84,7 +84,7 @@ public class JavaSpecificationVersion extends VersionNumber {
      * @throws NumberFormatException Version parsing error
      * @throws IllegalStateException JVM does not specify the mandatory {@link #JAVA_SPEC_VERSION_PROPERTY_NAME} property.
      */
-    @Nonnull
+    @NonNull
     public static JavaSpecificationVersion forCurrentJVM() throws NumberFormatException {
         final String value = System.getProperty(JAVA_SPEC_VERSION_PROPERTY_NAME);
         if (value == null) {
