@@ -25,7 +25,6 @@ package io.jenkins.lib.versionnumber;
 
 import hudson.util.VersionNumber;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
