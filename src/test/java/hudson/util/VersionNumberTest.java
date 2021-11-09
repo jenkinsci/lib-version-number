@@ -135,6 +135,7 @@ public class VersionNumberTest {
         assertOrderAlsoInMaven("99.v1234deadbeef", "99.5.vabcd1234abcd", "99.10.vabcd1234abcd", "100.vdead9876beef");
     }
 
+    @Test
     public void testOrEqualTo() {
         assertTrue(new VersionNumber("1.8").isNewerThanOrEqualTo(new VersionNumber("1.8")));
         assertTrue(new VersionNumber("1.9").isNewerThanOrEqualTo(new VersionNumber("1.8")));
