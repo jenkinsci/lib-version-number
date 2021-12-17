@@ -9,13 +9,13 @@
   </parent>
 
   <artifactId>version-number</artifactId>
-  <version>1.9</version>
+  <version>${revision}${changelist}</version>
   <name>Version Number Library</name>
   <description>Offers API classes for parsing and comparing version numbers</description>
   <url>https://github.com/jenkinsci/lib-${project.artifactId}</url>
 
   <properties>
-    <revision>1.9</revision>
+    <revision>1.10</revision>
     <changelist>-SNAPSHOT</changelist>
     <java.level>8</java.level>
     <gitHubRepo>jenkinsci/lib-${project.artifactId}</gitHubRepo>
@@ -56,7 +56,7 @@
     <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
     <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
     <url>https://github.com/${gitHubRepo}</url>
-    <tag>version-number-1.9</tag>
+    <tag>${scmTag}</tag>
   </scm>
 
   <licenses>
