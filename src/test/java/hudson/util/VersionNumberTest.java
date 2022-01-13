@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.hamcrest.CoreMatchers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -136,6 +137,17 @@ public class VersionNumberTest {
         // 100._. seems to work but is not intuitive.
         // Using changelist.format=%d.v%s behaves better, apparently because then the hash is never treated like a number.
         assertOrderAlsoInMaven("99.v1234deadbeef", "99.5.vabcd1234abcd", "99.10.vabcd1234abcd", "100.vdead9876beef");
+    }
+
+    @Issue("https://github.com/jenkinsci/incrementals-tools/issues/29")
+    @Test
+    public void majorVersion() {
+        assertOrderAlsoInMaven("1.1", "391.ve4a_38c1b_cf4b_");
+        // Weird but TBD if this matters in practice:
+        assertEquals(0, new DefaultArtifactVersion("391.ve4a_38c1b_cf4b_").getMajorVersion());
+        // More natural behavior of majorVersion:
+        assertOrderAlsoInMaven("1.1", "200.vabcd1234abcd", "391-ve4a_38c1b_cf4b_");
+        assertEquals(391, new DefaultArtifactVersion("391-ve4a_38c1b_cf4b_").getMajorVersion());
     }
 
     @Test
