@@ -23,9 +23,12 @@
  */
 package io.jenkins.lib.versionnumber;
 
-import hudson.util.VersionNumber;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.util.VersionNumber;
+import java.util.Collections;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 /**
  * Java Version Specification.
@@ -47,6 +50,39 @@ public class JavaSpecificationVersion extends VersionNumber {
     public static final JavaSpecificationVersion JAVA_12 = new JavaSpecificationVersion("12");
     public static final JavaSpecificationVersion JAVA_13 = new JavaSpecificationVersion("13");
 
+    private static final NavigableMap<Integer, Integer> RELEASE_TO_CLASS;
+    private static final NavigableMap<Integer, Integer> CLASS_TO_RELEASE;
+
+    static {
+        NavigableMap<Integer, Integer> releaseToClass = new TreeMap<>();
+        releaseToClass.put(1, 45);
+        releaseToClass.put(2, 46);
+        releaseToClass.put(3, 47);
+        releaseToClass.put(4, 48);
+        releaseToClass.put(5, 49);
+        releaseToClass.put(6, 50);
+        releaseToClass.put(7, 51);
+        releaseToClass.put(8, 52);
+        releaseToClass.put(9, 53);
+        releaseToClass.put(10, 54);
+        releaseToClass.put(11, 55);
+        releaseToClass.put(12, 56);
+        releaseToClass.put(13, 57);
+        releaseToClass.put(14, 58);
+        releaseToClass.put(15, 59);
+        releaseToClass.put(16, 60);
+        releaseToClass.put(17, 61);
+        releaseToClass.put(18, 62);
+        releaseToClass.put(19, 63);
+        RELEASE_TO_CLASS = Collections.unmodifiableNavigableMap(releaseToClass);
+
+        NavigableMap<Integer, Integer> classToRelease = new TreeMap<>();
+        for (Map.Entry<Integer, Integer> entry : releaseToClass.entrySet()) {
+            classToRelease.put(entry.getValue(), entry.getKey());
+        }
+        CLASS_TO_RELEASE = Collections.unmodifiableNavigableMap(classToRelease);
+    }
+
     /**
      * Constructor which automatically normalizes version strings.
      * @param version Java specification version, should follow JEP-223 or the previous format.
@@ -55,6 +91,49 @@ public class JavaSpecificationVersion extends VersionNumber {
     public JavaSpecificationVersion(@NonNull String version)
             throws NumberFormatException {
         super(normalizeVersion(version));
+    }
+
+    /**
+     * Given a release version, get the corresponding {@link JavaSpecificationVersion}.
+     *
+     * @param releaseVersion The release version; e.g., 8, 11, or 17.
+     * @return The {@link JavaSpecificationVersion}; e.g., 1.8, 11, or 17.
+     */
+    public static JavaSpecificationVersion fromReleaseVersion(int releaseVersion) {
+        if (releaseVersion > 8) {
+            return new JavaSpecificationVersion(Integer.toString(releaseVersion));
+        } else {
+            return new JavaSpecificationVersion("1." + releaseVersion);
+        }
+    }
+
+    /**
+     * Get the corresponding release version.
+     *
+     * @return The release version; e.g., 8, 11, or 17.
+     */
+    public int toReleaseVersion() {
+        int first = getDigitAt(0);
+        return first == 1 ? getDigitAt(1) : first;
+    }
+
+    /**
+     * Given a class file version, get the corresponding {@link JavaSpecificationVersion}.
+     *
+     * @param classVersion The class version; e.g., 52, 55, or 61.
+     * @return The {@link JavaSpecificationVersion}; e.g., 1.8, 11, or 17.
+     */
+    public static JavaSpecificationVersion fromClassVersion(int classVersion) {
+        return fromReleaseVersion(CLASS_TO_RELEASE.get(classVersion));
+    }
+
+    /**
+     * Get the corresponding class file version.
+     *
+     * @return The class file version; e.g., 52, 55, or 61.
+     */
+    public int toClassVersion() {
+        return RELEASE_TO_CLASS.get(toReleaseVersion());
     }
 
     @NonNull
