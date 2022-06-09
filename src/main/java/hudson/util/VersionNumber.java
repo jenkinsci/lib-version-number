@@ -169,7 +169,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
                     return 0;
 
                 default:
-                    throw new RuntimeException("invalid item: " + item.getClass());
+                    throw new IllegalArgumentException("invalid item: " + item.getClass());
             }
         }
 
@@ -270,7 +270,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
                     return -1;
 
                 default:
-                    throw new RuntimeException("invalid item: " + item.getClass());
+                    throw new IllegalArgumentException("invalid item: " + item.getClass());
             }
         }
 
@@ -354,7 +354,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
                     return -1;
 
                 default:
-                    throw new RuntimeException("invalid item: " + item.getClass());
+                    throw new IllegalArgumentException("invalid item: " + item.getClass());
             }
         }
 
