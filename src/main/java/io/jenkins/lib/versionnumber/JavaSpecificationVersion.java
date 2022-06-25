@@ -32,7 +32,7 @@ import java.util.TreeMap;
 
 /**
  * Java Version Specification.
- * Implemented according to https://openjdk.java.net/jeps/223
+ * Implemented according to <a href="https://openjdk.java.net/jeps/223">JEP 223</a>
  * @author Oleg Nenashev
  * @since 1.6
  */
