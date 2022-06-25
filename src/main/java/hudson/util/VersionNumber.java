@@ -68,19 +68,19 @@ public class VersionNumber implements Comparable<VersionNumber> {
     private ListItem items;
 
     private interface Item {
-        public static final int INTEGER_ITEM = 0;
+        int INTEGER_ITEM = 0;
 
-        public static final int STRING_ITEM = 1;
+        int STRING_ITEM = 1;
 
-        public static final int LIST_ITEM = 2;
+        int LIST_ITEM = 2;
 
-        public static final int WILDCARD_ITEM = 3;
+        int WILDCARD_ITEM = 3;
 
-        public int compareTo(Item item);
+        int compareTo(Item item);
 
-        public int getType();
+        int getType();
 
-        public boolean isNull();
+        boolean isNull();
     }
 
     /**
