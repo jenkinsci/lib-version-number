@@ -129,6 +129,12 @@ public class VersionNumberTest {
         assertOrderAlsoInMaven("2.0.0", "2.0", "2.0.*", "2.0.ea", "2.0.0.99", "2.0.1-alpha-1-rc9999.abc123def456", "2.0.1-alpha-1", "2.0.1-rc9999.abc123def456", "2.0.1-SNAPSHOT", "2.0.1");
     }
 
+    @Issue("https://github.com/jenkinsci/commons-lang3-api-plugin/pull/21")
+    @Test
+    public void libraryWrapper() {
+        assertOrderAlsoInMaven("3.12.0.0", "3.12.0-44.v1234deadbeef", "3.12.0-55.v1234deadbeef", "3.12.1-66.v1234deadbeef");
+    }
+
     @Issue("JEP-229")
     @Test
     public void backportJep229() {
