@@ -117,6 +117,30 @@ public class VersionNumberTest {
         assertEquals(-1, new VersionNumber("").getDigitAt(0));
     }
 
+    @Test
+    public void isSnapshot() {
+        assertTrue(new VersionNumber("2.32.3.1-SNAPSHOT").isSnapshot());
+        assertTrue(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isSnapshot());
+        assertTrue(new VersionNumber("1.12-SNAPSHOT").isSnapshot());
+
+        assertFalse(new VersionNumber("2.32.3.1").isSnapshot());
+        assertFalse(new VersionNumber("1.11.*").isSnapshot());
+        assertFalse(new VersionNumber("1.11.*").isSnapshot());
+        assertFalse(new VersionNumber("200.vabcd1234abcd").isSnapshot());
+    }
+
+    @Test
+    public void isRelease() {
+        assertTrue(new VersionNumber("2.32.3.1").isRelease());
+        assertTrue(new VersionNumber("1.11.*").isRelease());
+        assertTrue(new VersionNumber("1.11.*").isRelease());
+        assertTrue(new VersionNumber("200.vabcd1234abcd").isRelease());
+
+        assertFalse(new VersionNumber("2.32.3.1-SNAPSHOT").isRelease());
+        assertFalse(new VersionNumber("1.12-SNAPSHOT (private-08/24/2008 12:13-hudson)").isRelease());
+        assertFalse(new VersionNumber("1.12-SNAPSHOT").isRelease());
+    }
+
     private void assertOrderAlsoInMaven(String... versions) {
         errors.checkThat("Maven order is correct", Stream.of(versions).map(ComparableVersion::new).sorted().map(ComparableVersion::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));
         errors.checkThat("Jenkins order is correct", Stream.of(versions).map(VersionNumber::new).sorted().map(VersionNumber::toString).collect(Collectors.toList()), CoreMatchers.is(Arrays.asList(versions)));

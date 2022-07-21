@@ -545,6 +545,23 @@ public class VersionNumber implements Comparable<VersionNumber> {
     }
 
     /**
+     * Returns whether the version denotes a SNAPSHOT as defined by
+     * <a href="https://maven.apache.org/guides/getting-started/index.html#What_is_a_SNAPSHOT_version">...</a>
+     *
+     */
+    public boolean isSnapshot() {
+        return snapshot != null;
+    }
+
+    /**
+     * Returns whether the version denotes a release, as opposed to a SNAPSHOT
+     *
+     */
+    public boolean isRelease() {
+        return !isSnapshot();
+    }
+
+    /**
      * @deprecated see {@link #getDigitAt(int)}
      */
     @Deprecated
