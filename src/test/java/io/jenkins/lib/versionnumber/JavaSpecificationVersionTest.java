@@ -101,10 +101,14 @@ public class JavaSpecificationVersionTest {
         assertEquals(new JavaSpecificationVersion("1.8"), JavaSpecificationVersion.fromClassVersion(52));
         assertEquals(new JavaSpecificationVersion("11"), JavaSpecificationVersion.fromClassVersion(55));
         assertEquals(new JavaSpecificationVersion("17"), JavaSpecificationVersion.fromClassVersion(61));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> JavaSpecificationVersion.fromClassVersion(1000));
+        assertEquals("Unknown Java specification version for class version: 1000", e.getMessage());
 
         assertEquals(52, new JavaSpecificationVersion("1.8").toClassVersion());
         assertEquals(55, new JavaSpecificationVersion("11").toClassVersion());
         assertEquals(61, new JavaSpecificationVersion("17").toClassVersion());
+        e = assertThrows(IllegalArgumentException.class, () -> new JavaSpecificationVersion("1000").toClassVersion());
+        assertEquals("Unknown class version for release version: 1000", e.getMessage());
     }
 
     public void assertSpecEquals(JavaSpecificationVersion version, String value) {

@@ -123,18 +123,29 @@ public class JavaSpecificationVersion extends VersionNumber {
      *
      * @param classVersion The class version; e.g., 52, 55, or 61.
      * @return The {@link JavaSpecificationVersion}; e.g., 1.8, 11, or 17.
+     * @throws IllegalArgumentException If the Java specification version for the given class version is unknown.
      */
     public static JavaSpecificationVersion fromClassVersion(int classVersion) {
-        return fromReleaseVersion(CLASS_TO_RELEASE.get(classVersion));
+        Integer releaseVersion = CLASS_TO_RELEASE.get(classVersion);
+        if (releaseVersion == null) {
+            throw new IllegalArgumentException("Unknown Java specification version for class version: " + classVersion);
+        }
+        return fromReleaseVersion(releaseVersion);
     }
 
     /**
      * Get the corresponding class file version.
      *
      * @return The class file version; e.g., 52, 55, or 61.
+     * @throws IllegalArgumentException If the class version for the given Java Specification Version is unknown.
      */
     public int toClassVersion() {
-        return RELEASE_TO_CLASS.get(toReleaseVersion());
+        int releaseVersion = toReleaseVersion();
+        Integer classVersion = RELEASE_TO_CLASS.get(releaseVersion);
+        if (classVersion == null) {
+            throw new IllegalArgumentException("Unknown class version for release version: " + releaseVersion);
+        }
+        return classVersion;
     }
 
     @NonNull
