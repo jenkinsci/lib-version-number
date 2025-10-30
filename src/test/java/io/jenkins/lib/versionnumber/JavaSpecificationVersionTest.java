@@ -23,22 +23,22 @@
  */
 package io.jenkins.lib.versionnumber;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.For;
 
 /**
  * Tests for {@link JavaSpecificationVersion}.
  */
 @For(JavaSpecificationVersion.class)
-public class JavaSpecificationVersionTest {
+class JavaSpecificationVersionTest {
 
     @Test
-    public void shouldParseValidNumbersCorrectly() {
+    void shouldParseValidNumbersCorrectly() {
         assertSpecEquals(JavaSpecificationVersion.JAVA_6, "1.6");
         assertSpecEquals(JavaSpecificationVersion.JAVA_7, "1.7");
         assertSpecEquals(JavaSpecificationVersion.JAVA_8, "1.8");
@@ -48,7 +48,7 @@ public class JavaSpecificationVersionTest {
     }
 
     @Test
-    public void shouldParseOldSpecCorrectly() {
+    void shouldParseOldSpecCorrectly() {
         assertSpecEquals(JavaSpecificationVersion.JAVA_9, "1.9");
         assertSpecEquals(JavaSpecificationVersion.JAVA_10, "1.10");
         assertSpecEquals(JavaSpecificationVersion.JAVA_11, "1.11");
@@ -56,14 +56,14 @@ public class JavaSpecificationVersionTest {
     }
 
     @Test
-    public void shouldResolveIncorrectSpecs() {
+    void shouldResolveIncorrectSpecs() {
         assertSpecEquals(JavaSpecificationVersion.JAVA_8, "8");
         assertSpecEquals(JavaSpecificationVersion.JAVA_7, "7");
         assertSpecEquals(JavaSpecificationVersion.JAVA_5, "5");
     }
 
     @Test
-    public void shouldCompareVersionsProperly() {
+    void shouldCompareVersionsProperly() {
         assertTrue(JavaSpecificationVersion.JAVA_5.isOlderThan(JavaSpecificationVersion.JAVA_6));
         assertTrue(JavaSpecificationVersion.JAVA_6.isOlderThan(JavaSpecificationVersion.JAVA_7));
         assertTrue(JavaSpecificationVersion.JAVA_7.isOlderThan(JavaSpecificationVersion.JAVA_8));
@@ -75,18 +75,18 @@ public class JavaSpecificationVersionTest {
     }
 
     @Test
-    public void shouldRetrieveSpecVersionForTheCurrentJVM() {
+    void shouldRetrieveSpecVersionForTheCurrentJVM() {
         assertNotNull(JavaSpecificationVersion.forCurrentJVM());
     }
 
     @Test
-    public void invalidVersions() {
+    void invalidVersions() {
         assertThrows(NumberFormatException.class, () -> new JavaSpecificationVersion("1.1.1"));
         assertThrows(NumberFormatException.class, () -> new JavaSpecificationVersion("fubar"));
     }
 
     @Test
-    public void releaseVersion() {
+    void releaseVersion() {
         assertEquals(new JavaSpecificationVersion("1.8"), JavaSpecificationVersion.fromReleaseVersion(8));
         assertEquals(new JavaSpecificationVersion("11"), JavaSpecificationVersion.fromReleaseVersion(11));
         assertEquals(new JavaSpecificationVersion("17"), JavaSpecificationVersion.fromReleaseVersion(17));
@@ -97,7 +97,7 @@ public class JavaSpecificationVersionTest {
     }
 
     @Test
-    public void classVersion() {
+    void classVersion() {
         assertEquals(new JavaSpecificationVersion("1.8"), JavaSpecificationVersion.fromClassVersion(52));
         assertEquals(new JavaSpecificationVersion("11"), JavaSpecificationVersion.fromClassVersion(55));
         assertEquals(new JavaSpecificationVersion("17"), JavaSpecificationVersion.fromClassVersion(61));
@@ -111,18 +111,18 @@ public class JavaSpecificationVersionTest {
         assertEquals("Unknown class version for release version: 1000", e.getMessage());
     }
 
-    public void assertSpecEquals(JavaSpecificationVersion version, String value) {
+    private static void assertSpecEquals(JavaSpecificationVersion version, String value) {
         JavaSpecificationVersion actualSpec = new JavaSpecificationVersion(value);
-        assertEquals("Wrong Java version", version, actualSpec);
+        assertEquals(version, actualSpec, "Wrong Java version");
     }
 
-    public void assertOlder(JavaSpecificationVersion version1, JavaSpecificationVersion version2) {
-        assertTrue(String.format("Version %s should be older than %s", version1, version2),
-                version1.isOlderThan(version2));
+    private static void assertOlder(JavaSpecificationVersion version1, JavaSpecificationVersion version2) {
+        assertTrue(version1.isOlderThan(version2),
+                String.format("Version %s should be older than %s", version1, version2));
     }
 
-    public void assertNewer(JavaSpecificationVersion version1, JavaSpecificationVersion version2) {
-        assertTrue(String.format("Version %s should be newer than %s", version1, version2),
-                version1.isNewerThan(version2));
+    private static void assertNewer(JavaSpecificationVersion version1, JavaSpecificationVersion version2) {
+        assertTrue(version1.isNewerThan(version2),
+                String.format("Version %s should be newer than %s", version1, version2));
     }
 }
