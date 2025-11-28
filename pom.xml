@@ -32,6 +32,7 @@
     <revision>1.13</revision>
     <changelist>-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/lib-${project.artifactId}</gitHubRepo>
+    <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
   </properties>
 
   <dependencies>
@@ -47,8 +48,8 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
