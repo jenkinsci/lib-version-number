@@ -81,8 +81,14 @@ class JavaSpecificationVersionTest {
 
     @Test
     void shouldRetrieveClassVersionForTheCurrentJVM() {
-        // Library no longer supports Java versions before 21
-        assertTrue(JavaSpecificationVersion.forCurrentJVM().toClassVersion() >= 21);
+        // Library no longer supports Java versions before class version 61 (Java 17)
+        assertTrue(JavaSpecificationVersion.forCurrentJVM().toClassVersion() >= 61);
+    }
+
+    @Test
+    void shouldRetrieveReleaseVersionForTheCurrentJVM() {
+        // Library no longer supports Java versions before Java 17
+        assertTrue(JavaSpecificationVersion.forCurrentJVM().toReleaseVersion() >= 17);
     }
 
     @Test
