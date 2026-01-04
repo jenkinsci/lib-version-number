@@ -80,6 +80,12 @@ class JavaSpecificationVersionTest {
     }
 
     @Test
+    void shouldRetrieveClassVersionForTheCurrentJVM() {
+        // Library no longer supports Java versions before 21
+        assertTrue(JavaSpecificationVersion.forCurrentJVM().toClassVersion() >= 21);
+    }
+
+    @Test
     void invalidVersions() {
         assertThrows(NumberFormatException.class, () -> new JavaSpecificationVersion("1.1.1"));
         assertThrows(NumberFormatException.class, () -> new JavaSpecificationVersion("fubar"));
