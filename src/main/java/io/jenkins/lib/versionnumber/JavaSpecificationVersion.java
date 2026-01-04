@@ -75,6 +75,11 @@ public class JavaSpecificationVersion extends VersionNumber {
         releaseToClass.put(18, 62);
         releaseToClass.put(19, 63);
         releaseToClass.put(20, 64);
+        releaseToClass.put(21, 65);
+        releaseToClass.put(22, 66);
+        releaseToClass.put(23, 67);
+        releaseToClass.put(24, 68);
+        releaseToClass.put(25, 69);
         RELEASE_TO_CLASS = Collections.unmodifiableNavigableMap(releaseToClass);
 
         NavigableMap<Integer, Integer> classToRelease = new TreeMap<>();
