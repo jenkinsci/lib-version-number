@@ -5,5 +5,5 @@
  */
 buildPlugin(useContainerAgent: true, configurations: [
   [ platform: 'linux', jdk: 25 ],
-  [ platform: 'windows', jdk: 21 ]
+  [ platform: 'windows', jdk: 17 ] // Intentionally testing Java 17 for this widely used library
 ])
